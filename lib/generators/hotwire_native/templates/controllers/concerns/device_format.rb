@@ -8,6 +8,6 @@ module DeviceFormat
   private
 
   def set_variant
-    return request.variant = :native if turbo_native_app?
+    return request.variant = :native if turbo_native_app? || browser.device.mobile?
   end
 end

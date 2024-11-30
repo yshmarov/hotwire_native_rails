@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 module HotwireNativeHelper
+  # forbid zooming on mobile devices
   def viewport_meta_tag
     content = ['width=device-width,initial-scale=1']
-    content << 'maximum-scale=1, user-scalable=0' if turbo_native_app?
+    content << 'maximum-scale=1, user-scalable=0' if turbo_native_app? || browser.device.mobile?
     tag.meta(name: 'viewport', content: content.join(','))
   end
 
+  # set on <html> tag
   def platform_identifier
     'data-turbo-native' if turbo_native_app?
   end
@@ -17,6 +19,7 @@ module HotwireNativeHelper
     'advance'
   end
 
+  # override link_to to not open internal links in in-app browser on native app
   def link_to(name = nil, options = nil, html_options = {}, &block)
     html_options[:target] = '' if turbo_native_app? && internal_url?(url_for(options))
     super(name, options, html_options, &block)

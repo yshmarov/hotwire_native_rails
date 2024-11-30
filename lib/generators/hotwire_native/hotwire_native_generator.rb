@@ -1,6 +1,10 @@
 class HotwireNativeGenerator < Rails::Generators::Base
   source_root File.expand_path("templates", __dir__)
 
+  def add_gems
+    gem "browser"
+  end
+
   def copy_files
     # helpers
     copy_file "helpers/hotwire_native_helper.rb", "app/helpers/hotwire_native_helper.rb"
