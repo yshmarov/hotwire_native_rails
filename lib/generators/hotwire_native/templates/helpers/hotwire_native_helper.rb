@@ -3,7 +3,7 @@
 module HotwireNativeHelper
   def viewport_meta_tag
     content = ['width=device-width,initial-scale=1']
-    content << 'maximum-scale=1, user-scalable=0' if turbo_native_app? || browser.device.mobile?
+    content << 'maximum-scale=1, user-scalable=0' if turbo_native_app?
     tag.meta(name: 'viewport', content: content.join(','))
   end
 

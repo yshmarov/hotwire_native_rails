@@ -29,6 +29,10 @@ class HotwireNativeGenerator < Rails::Generators::Base
     run "yarn add @hotwired/stimulus @hotwired/hotwire-native-bridge" if node?
   end
 
+  def add_viewport_meta_tag
+    gsub_file "app/views/layouts/application.html.erb", "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">", "<%= viewport_meta_tag %>"
+  end
+
   private
 
   def importmaps?
