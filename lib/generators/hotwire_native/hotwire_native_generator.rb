@@ -39,6 +39,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
       inject_into_file "config/tailwind.config.js", after: "plugins: [" do
         <<-JS
+
     plugin(function({ addVariant }) {
       addVariant("turbo-native", "html[data-turbo-native] &"),
       addVariant("non-turbo-native", "html:not([data-turbo-native]) &")
