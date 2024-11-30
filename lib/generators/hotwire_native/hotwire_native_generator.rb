@@ -29,6 +29,11 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   # https://native.hotwired.dev/reference/bridge-installation
   def install_javascript
+    copy_file "javascript/controllers/bridge/button_controller.js", "app/javascript/controllers/bridge/button_controller.js"
+    copy_file "javascript/controllers/bridge/menu_controller.js", "app/javascript/controllers/bridge/menu_controller.js"
+    copy_file "javascript/controllers/bridge/form_controller.js", "app/javascript/controllers/bridge/form_controller.js"
+    copy_file "javascript/controllers/bridge/overflow_menu_controller.js", "app/javascript/controllers/bridge/overflow_menu_controller.js"
+
     run "bin/importmap pin @hotwired/stimulus @hotwired/hotwire-native-bridge" if importmaps?
     run "yarn add @hotwired/stimulus @hotwired/hotwire-native-bridge" if node?
   end
