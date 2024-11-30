@@ -33,6 +33,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
     copy_file "javascript/controllers/bridge/menu_controller.js", "app/javascript/controllers/bridge/menu_controller.js"
     copy_file "javascript/controllers/bridge/form_controller.js", "app/javascript/controllers/bridge/form_controller.js"
     copy_file "javascript/controllers/bridge/overflow_menu_controller.js", "app/javascript/controllers/bridge/overflow_menu_controller.js"
+    copy_file "javascript/controllers/bridge/nav_controller.js", "app/javascript/controllers/bridge/nav_controller.js"
 
     run "bin/importmap pin @hotwired/stimulus @hotwired/hotwire-native-bridge" if importmaps?
     run "yarn add @hotwired/stimulus @hotwired/hotwire-native-bridge" if node?
