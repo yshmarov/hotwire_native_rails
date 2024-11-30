@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Yaro Shm"]
   spec.email = ["yshmarov@gmail.com"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
+  spec.summary = "Generate Hotwire Native Rails helpers and bridge components"
   spec.homepage = "https://github.com/yshmarov/hotwire_native_rails"
   spec.license = "MIT"
 
