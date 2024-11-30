@@ -10,6 +10,13 @@ class HotwireNativeGenerator < Rails::Generators::Base
     copy_file "routes/hotwire_native.rb", "config/routes/hotwire_native.rb"
     copy_file "controllers/hotwire_native/v1/android/path_configuration_controller.rb", "app/controllers/hotwire_native/v1/android/path_configuration_controller.rb"
     copy_file "controllers/hotwire_native/v1/ios/path_configuration_controller.rb", "app/controllers/hotwire_native/v1/ios/path_configuration_controller.rb"
+
+    # :native request variant
+    copy_file "controllers/concerns/device_format.rb", "app/controllers/concerns/device_format.rb"
+ end
+
+  def add_detect_device_to_application_controller
+    inject_into_class "app/controllers/application_controller.rb", ApplicationController, "  include DetectDevice\n"
   end
 
   def add_routes
