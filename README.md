@@ -23,6 +23,7 @@ rails g hotwire_native
 - use `data: { turbo_action: replace_if_native }` to submit authentication forms & forms in modals
 - `:mobile` request variant. `index.html+mobile.erb`
 - override link_to to not open internal links in in-app browser on native app
+- conditionally override page title for native apps
 
 #### CSS
 - `turbo-native:` css variant (works with CSS and Tailwind)
