@@ -30,7 +30,8 @@ rails g hotwire_native
 #### Bridge Components
 - install Hotwire Native Bridge (works with Importmaps and Node)
 - add default bridge components (`Form`, `Menu`, `Button`)
-- `bridge_form_with` - easily apply Bridge Form component
+- add `Nav` (UIMenu) bridge component
+- `bridge_form_with` - easily apply Bridge `Form` component
 
 #### Path Configuration
 - `path_configuration_controller` for `ios` and `android`

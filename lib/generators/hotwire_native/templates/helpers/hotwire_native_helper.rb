@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
 module HotwireNativeHelper
+  # before
+  # <title><%= content_for(:title) || "My App" %></title>
+  # after
+  # <title><%= page_title %></title>
+  # usage
+  # <% content_for :turbo_native_title, "Sign in" %>
+  # <% content_for :title, "Sign in | My App" %>
+  def page_title
+    if turbo_native_app?
+      content_for(:turbo_native_title) || content_for(:title) || Rails.application.class.module_parent.name
+    else
+      content_for(:title) || Rails.application.class.module_parent.name
+    end
+  end
+
   # forbid zooming on mobile devices
   def viewport_meta_tag
     content = ['width=device-width,initial-scale=1']

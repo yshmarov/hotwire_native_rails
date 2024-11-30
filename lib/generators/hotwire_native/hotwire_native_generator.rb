@@ -53,6 +53,10 @@ class HotwireNativeGenerator < Rails::Generators::Base
     gsub_file "app/views/layouts/application.html.erb", "<html>", "<html <%= platform_identifier %>>"
   end
 
+  def set_page_title
+    gsub_file "app/views/layouts/application.html.erb", /<title>.*<\/title>/, "<title><%= page_title %></title>"
+  end
+
   private
 
   def importmaps?
