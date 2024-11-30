@@ -33,6 +33,21 @@ class HotwireNativeGenerator < Rails::Generators::Base
     gsub_file "app/views/layouts/application.html.erb", "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">", "<%= viewport_meta_tag %>"
   end
 
+  def add_tailwind_variants
+    if tailwind?
+      prepend_to_file "config/tailwind.config.js", "const plugin = require('tailwindcss/plugin')\n"
+
+      inject_into_file "config/tailwind.config.js", after: "plugins: [" do
+        <<-JS
+    plugin(function({ addVariant }) {
+      addVariant("turbo-native", "html[data-turbo-native] &"),
+      addVariant("non-turbo-native", "html:not([data-turbo-native]) &")
+    }),
+        JS
+      end
+    end
+  end
+
   private
 
   def importmaps?
@@ -41,5 +56,9 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   def node?
     Rails.root.join("package.json").exist?
+  end
+
+  def tailwind?
+    Rails.root.join("config/tailwind.config.js").exist?
   end
 end
