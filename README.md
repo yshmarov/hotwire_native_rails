@@ -34,3 +34,18 @@ rails g hotwire_native_rails
 
 #### Path Configuration
 - `path_configuration_controller` for `ios` and `android`
+
+## Development
+
+Make a release to rubygems:
+
+```sh
+# 1. update version in version.rb
+# 2. zip the gem
+gem build hotwire_native_rails.gemspec
+# 3. push the zip to rubygems
+gem push hotwire_native_rails-0.2.0.gem
+```
+
+- [Github source](https://github.com/yshmarov/hotwire_native_rails)
+- [Rubygems source](https://rubygems.org/gems/hotwire_native_rails)
