@@ -33,20 +33,10 @@ class HotwireNativeGenerator < Rails::Generators::Base
     gsub_file "app/views/layouts/application.html.erb", "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">", "<%= viewport_meta_tag %>"
   end
 
-  def add_tailwind_variants
-    if tailwind?
-      prepend_to_file "config/tailwind.config.js", "const plugin = require('tailwindcss/plugin')\n"
+  def add_css_variants
+    return add_tailwind_css_variants if tailwind?
 
-      inject_into_file "config/tailwind.config.js", after: "plugins: [" do
-        <<-JS
-
-    plugin(function({ addVariant }) {
-      addVariant("turbo-native", "html[data-turbo-native] &"),
-      addVariant("non-turbo-native", "html:not([data-turbo-native]) &")
-    }),
-        JS
-      end
-    end
+    add_turbo_native_css
   end
 
   def add_platform_identifier
@@ -65,5 +55,35 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   def tailwind?
     Rails.root.join("config/tailwind.config.js").exist?
+  end
+
+  # class="turbo-native:hidden"
+  # class="non-turbo-native:hidden"
+  def add_tailwind_css_variants
+    prepend_to_file "config/tailwind.config.js", "const plugin = require('tailwindcss/plugin')\n"
+
+    inject_into_file "config/tailwind.config.js", after: "plugins: [" do
+      <<-JS
+
+  plugin(function({ addVariant }) {
+    addVariant("turbo-native", "html[data-turbo-native] &"),
+    addVariant("non-turbo-native", "html:not([data-turbo-native]) &")
+  }),
+      JS
+    end
+  end
+
+  # class="turbo-native:hidden"
+  def add_turbo_native_css
+    gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"turbo-native\" if turbo_native_app? %>\">"
+
+    append_to_file "app/assets/stylesheets/application.css" do
+      <<-CSS
+
+body.turbo-native .turbo-native:hidden {
+  display: none;
+}
+      CSS
+    end
   end
 end
