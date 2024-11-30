@@ -13,7 +13,7 @@ bundle add hotwire_native_rails
 Run the generator:
 
 ```sh
-rails g hotwire_native_rails
+rails g hotwire_native
 ```
 
 ## Usage
