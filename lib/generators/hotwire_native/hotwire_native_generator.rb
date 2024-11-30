@@ -22,4 +22,20 @@ class HotwireNativeGenerator < Rails::Generators::Base
   def add_routes
     route "draw(:hotwire_native)"
   end
+
+  # https://native.hotwired.dev/reference/bridge-installation
+  def install_javascript
+    run "bin/importmap pin @hotwired/stimulus @hotwired/hotwire-native-bridge" if importmaps?
+    run "yarn add @hotwired/stimulus @hotwired/hotwire-native-bridge" if node?
+  end
+
+  private
+
+  def importmaps?
+    Rails.root.join("config/importmap.rb").exist?
+  end
+
+  def node?
+    Rails.root.join("package.json").exist?
+  end
 end
