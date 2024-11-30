@@ -49,6 +49,10 @@ class HotwireNativeGenerator < Rails::Generators::Base
     end
   end
 
+  def add_platform_identifier
+    gsub_file "app/views/layouts/application.html.erb", "<html>", "<html <%= platform_identifier %>>"
+  end
+
   private
 
   def importmaps?
