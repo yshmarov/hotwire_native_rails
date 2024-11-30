@@ -13,6 +13,8 @@ module HotwireNativeHelper
     'data-turbo-native' if turbo_native_app?
   end
 
+  # link_to 'Next', next_path, data: { turbo_action: replace_if_native }
+  # https://turbo.hotwired.dev/handbook/drive#application-visits
   def replace_if_native
     return 'replace' if turbo_native_app?
 
@@ -25,6 +27,7 @@ module HotwireNativeHelper
     super(name, options, html_options, &block)
   end
 
+  # https://github.com/joemasilotti/daily-log/blob/main/rails/app/helpers/form_helper.rb
   class BridgeFormBuilder < ActionView::Helpers::FormBuilder
     def submit(value = nil, options = {})
       options[:data] ||= {}
