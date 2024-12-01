@@ -9,11 +9,13 @@ class HotwireNativeGenerator < Rails::Generators::Base
     # helpers
     copy_file "helpers/hotwire_native_helper.rb", "app/helpers/hotwire_native_helper.rb"
     copy_file "test_unit/hotwire_native_helper_test.rb", "test/helpers/hotwire_native_helper_test.rb"
+    copy_file "test_unit/hotwire_native_controller_test.rb", "test/controllers/hotwire_native_controller_test.rb"
 
     # routes
     copy_file "routes/hotwire_native.rb", "config/routes/hotwire_native.rb"
-    copy_file "controllers/hotwire_native/v1/android/path_configuration_controller.rb", "app/controllers/hotwire_native/v1/android/path_configuration_controller.rb"
-    copy_file "controllers/hotwire_native/v1/ios/path_configuration_controller.rb", "app/controllers/hotwire_native/v1/ios/path_configuration_controller.rb"
+    copy_file "controllers/hotwire_native/v1/android/path_configurations_controller.rb", "app/controllers/hotwire_native/v1/android/path_configurations_controller.rb"
+    copy_file "controllers/hotwire_native/v1/ios/path_configurations_controller.rb", "app/controllers/hotwire_native/v1/ios/path_configurations_controller.rb"
+    copy_file "test_unit/path_configurations_controller_test.rb", "test/controllers/path_configurations_controller_test.rb"
 
     # :native request variant
     copy_file "controllers/concerns/device_format.rb", "app/controllers/concerns/device_format.rb"
