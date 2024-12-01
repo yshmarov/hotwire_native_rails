@@ -37,37 +37,37 @@ module HotwireNativeHelper
   end
 
   # override link_to to not open internal links in in-app browser on native app
-  def link_to(name = nil, options = nil, html_options = {}, &block)
+  def link_to(name = nil, options = nil, html_options = {}, &)
     html_options[:target] = '' if turbo_native_app? && internal_url?(url_for(options))
-    super(name, options, html_options, &block)
+    super
   end
 
   # https://github.com/joemasilotti/daily-log/blob/main/rails/app/helpers/form_helper.rb
   class BridgeFormBuilder < ActionView::Helpers::FormBuilder
     def submit(value = nil, options = {})
       options[:data] ||= {}
-      options["data-bridge--form-target"] = "submit"
-      options[:class] = [options[:class], "turbo-native:hidden"].compact
-      super(value, options)
+      options['data-bridge--form-target'] = 'submit'
+      options[:class] = [options[:class], 'turbo-native:hidden'].compact
+      super
     end
   end
 
-  def bridge_form_with(*, **options, &block)
+  def bridge_form_with(*, **options, &)
     options[:html] ||= {}
     options[:html][:data] ||= {}
     options[:html][:data] = options[:html][:data].merge(bridge_form_data)
 
     options[:builder] = BridgeFormBuilder
 
-    form_with(*, **options, &block)
+    form_with(*, **options, &)
   end
 
   private
 
   def bridge_form_data
     {
-      controller: "bridge--form",
-      action: "turbo:submit-start->bridge--form#submitStart turbo:submit-end->bridge--form#submitEnd"
+      controller: 'bridge--form',
+      action: 'turbo:submit-start->bridge--form#submitStart turbo:submit-end->bridge--form#submitEnd'
     }
   end
 
