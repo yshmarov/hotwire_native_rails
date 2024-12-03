@@ -23,7 +23,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   def add_detect_device_to_application_controller
     inject_into_file "app/controllers/application_controller.rb", after: "class ApplicationController < ActionController::Base\n" do
-      "  include DetectDevice\n"
+      "  include DeviceFormat\n"
     end
   end
 
