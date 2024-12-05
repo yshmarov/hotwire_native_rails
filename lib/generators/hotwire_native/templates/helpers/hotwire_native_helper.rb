@@ -6,11 +6,11 @@ module HotwireNativeHelper
   # after
   # <title><%= page_title %></title>
   # usage
-  # <% content_for :turbo_native_title, "Sign in" %>
+  # <% content_for :hotwire_native_title, "Sign in" %>
   # <% content_for :title, "Sign in | My App" %>
   def page_title
     if turbo_native_app?
-      content_for(:turbo_native_title) || content_for(:title) || Rails.application.class.module_parent.name
+      content_for(:hotwire_native_title) || content_for(:title) || Rails.application.class.module_parent.name
     else
       content_for(:title) || Rails.application.class.module_parent.name
     end

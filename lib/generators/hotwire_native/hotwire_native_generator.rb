@@ -50,7 +50,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
   def add_css_variants
     return add_tailwind_css_variants if tailwind?
 
-    add_turbo_native_css
+    add_hotwire_native_css
   end
 
   def add_platform_identifier
@@ -92,7 +92,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
   end
 
   # class="hotwire-native:hidden"
-  def add_turbo_native_css
+  def add_hotwire_native_css
     gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"hotwire-native\" if turbo_native_app? %>\">"
 
     append_to_file "app/assets/stylesheets/application.css" do
