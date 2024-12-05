@@ -75,8 +75,8 @@ class HotwireNativeGenerator < Rails::Generators::Base
     Rails.root.join("config/tailwind.config.js").exist?
   end
 
-  # class="turbo-native:hidden"
-  # class="non-turbo-native:hidden"
+  # class="hotwire-native:hidden"
+  # class="non-hotwire-native:hidden"
   def add_tailwind_css_variants
     prepend_to_file "config/tailwind.config.js", "const plugin = require('tailwindcss/plugin')\n"
 
@@ -84,21 +84,21 @@ class HotwireNativeGenerator < Rails::Generators::Base
       <<-JS
 
   plugin(function({ addVariant }) {
-    addVariant("turbo-native", "html[data-turbo-native] &"),
-    addVariant("non-turbo-native", "html:not([data-turbo-native]) &")
+    addVariant("hotwire-native", "html[data-hotwire-native] &"),
+    addVariant("non-hotwire-native", "html:not([data-hotwire-native]) &")
   }),
       JS
     end
   end
 
-  # class="turbo-native:hidden"
+  # class="hotwire-native:hidden"
   def add_turbo_native_css
-    gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"turbo-native\" if turbo_native_app? %>\">"
+    gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"hotwire-native\" if turbo_native_app? %>\">"
 
     append_to_file "app/assets/stylesheets/application.css" do
       <<-CSS
 
-body.turbo-native .turbo-native:hidden {
+body.hotwire-native .hotwire-native:hidden {
   display: none;
 }
       CSS

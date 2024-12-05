@@ -25,7 +25,7 @@ module HotwireNativeHelper
 
   # set on <html> tag
   def platform_identifier
-    'data-turbo-native' if turbo_native_app?
+    'data-hotwire-native' if turbo_native_app?
   end
 
   # link_to 'Next', next_path, data: { turbo_action: replace_if_native }
@@ -47,7 +47,7 @@ module HotwireNativeHelper
     def submit(value = nil, options = {})
       options[:data] ||= {}
       options['data-bridge--form-target'] = 'submit'
-      options[:class] = [options[:class], 'turbo-native:hidden'].compact
+      options[:class] = [options[:class], 'hotwire-native:hidden'].compact
       super
     end
   end

@@ -28,7 +28,7 @@ Recommended to use with [my fork of iOS Hotwire Native starter app](https://gith
 - conditionally override page `<title>` for native apps
 
 #### CSS
-- `turbo-native:` css variant (works with CSS and Tailwind)
+- `hotwire-native:` css variant (works with CSS and Tailwind)
 
 #### Bridge Components
 - install Hotwire Native Bridge (works with Importmaps and Node)
