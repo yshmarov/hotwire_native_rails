@@ -20,6 +20,14 @@ class HotwireNative::V1::Ios::PathConfigurationsController < ActionController::B
           },
           {
             "patterns": [
+              "^/users/edit$"
+            ],
+            "properties": {
+              "context": "default"
+            }
+          },
+          {
+            "patterns": [
               "/numbers$"
             ],
             "properties": {
