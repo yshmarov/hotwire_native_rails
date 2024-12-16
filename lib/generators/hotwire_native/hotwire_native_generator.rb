@@ -15,6 +15,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
     copy_file "routes/hotwire_native.rb", "config/routes/hotwire_native.rb"
     copy_file "controllers/hotwire_native/v1/android/path_configurations_controller.rb", "app/controllers/hotwire_native/v1/android/path_configurations_controller.rb"
     copy_file "controllers/hotwire_native/v1/ios/path_configurations_controller.rb", "app/controllers/hotwire_native/v1/ios/path_configurations_controller.rb"
+    copy_file "controllers/hotwire_native/tabs_controller.rb", "app/controllers/hotwire_native/tabs_controller.rb"
     copy_file "test_unit/path_configurations_controller_test.rb", "test/controllers/path_configurations_controller_test.rb"
 
     # :native request variant
