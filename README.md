@@ -24,7 +24,7 @@ Recommended to use with [my fork of iOS Hotwire Native starter app](https://gith
 - `viewport_meta_tag` - forbid zooming on mobile/native
 - use `data: { turbo_action: replace_if_native }` to submit authentication forms & forms in modals
 - `:mobile` request variant. `index.html+mobile.erb`
-- override link_to to not open internal links in in-app browser on native app
+- override `link_to` to not open internal links in in-app browser on native app
 - conditionally override page `<title>` for native apps
 
 #### CSS
@@ -33,11 +33,13 @@ Recommended to use with [my fork of iOS Hotwire Native starter app](https://gith
 #### Bridge Components
 - install Hotwire Native Bridge (works with Importmaps and Node)
 - add default bridge components (`Form`, `Menu`, `Button`)
-- add `Nav` (UIMenu) bridge component
+- add `Nav` (UIMenu) component
+- add `Review Prompt` component
 - `bridge_form_with` - easily apply Bridge `Form` component
 
 #### Path Configuration
 - `path_configuration_controller` for `ios` and `android`
+- Tabs controller - re-route native tabs
 
 ## Development
 
@@ -48,7 +50,7 @@ Make a release to rubygems:
 # 2. zip the gem
 gem build hotwire_native_rails.gemspec
 # 3. push the zip to rubygems
-gem push hotwire_native_rails-0.2.0.gem
+gem push hotwire_native_rails-0.4.0.gem
 ```
 
 - [Github source](https://github.com/yshmarov/hotwire_native_rails)
