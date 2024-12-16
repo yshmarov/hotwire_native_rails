@@ -23,7 +23,8 @@ class HotwireNative::V1::Ios::PathConfigurationsController < ActionController::B
               "^/users/edit$"
             ],
             "properties": {
-              "context": "default"
+              "context": "default",
+              "pull_to_refresh_enabled": true
             }
           },
           {
