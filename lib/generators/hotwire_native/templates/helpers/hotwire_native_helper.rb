@@ -52,6 +52,10 @@ module HotwireNativeHelper
     end
   end
 
+  # CAUTION: the submit button has to have a title
+  # BAD: f.submit
+  # GOOD: f.submit "Save"
+  # GOOD: f.submit t('.save')
   def bridge_form_with(*, **options, &)
     options[:html] ||= {}
     options[:html][:data] ||= {}
