@@ -100,8 +100,8 @@ class HotwireNativeGenerator < Rails::Generators::Base
     append_to_file "app/assets/stylesheets/application.css" do
       <<-CSS
 
-body.hotwire-native .hotwire-native:hidden {
-  display: none;
+body.hotwire-native .d-hotwire-native-none {
+  display: none !important;
 }
       CSS
     end
