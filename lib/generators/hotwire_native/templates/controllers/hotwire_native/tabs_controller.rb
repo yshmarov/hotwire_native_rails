@@ -16,4 +16,7 @@ class HotwireNative::TabsController < ActionController::Base
   end
 
   # add more tabs (max 5)
+  # def tab3; end
+  # def tab4; end
+  # def tab5; end
 end
