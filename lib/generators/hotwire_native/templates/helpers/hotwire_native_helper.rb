@@ -9,11 +9,14 @@ module HotwireNativeHelper
   # <% content_for :hotwire_native_title, "Sign in" %>
   # <% content_for :title, "Sign in | My App" %>
   def page_title
-    if turbo_native_app?
-      content_for(:hotwire_native_title) || content_for(:title) || @page_title || Rails.application.class.module_parent.name
-    else
-      content_for(:title) || Rails.application.class.module_parent.name
-    end
+    title_options = [
+      (content_for(:hotwire_native_title) if turbo_native_app?),
+      content_for(:title),
+      @page_title,
+      Rails.application.class.module_parent.name
+    ]
+    
+    title_options.compact.first
   end
 
   # forbid zooming on mobile devices
@@ -30,6 +33,8 @@ module HotwireNativeHelper
 
   # link_to 'Next', next_path, data: { turbo_action: replace_if_native }
   # https://turbo.hotwired.dev/handbook/drive#application-visits
+  # caution: if you open a modal on top of the root page, and replace, it will replace the root page.
+  # projects#show will replace projects#index => BAD
   def replace_if_native
     return 'replace' if turbo_native_app?
 
@@ -44,6 +49,10 @@ module HotwireNativeHelper
 
   # https://github.com/joemasilotti/daily-log/blob/main/rails/app/helpers/form_helper.rb
   class BridgeFormBuilder < ActionView::Helpers::FormBuilder
+    # CAUTION: the submit button has to have a title
+    # BAD: f.submit
+    # GOOD: f.submit "Save"
+    # GOOD: f.submit t('.save')
     def submit(value = nil, options = {})
       options[:data] ||= {}
       options['data-bridge--form-target'] = 'submit'
@@ -52,10 +61,8 @@ module HotwireNativeHelper
     end
   end
 
-  # CAUTION: the submit button has to have a title
-  # BAD: f.submit
-  # GOOD: f.submit "Save"
-  # GOOD: f.submit t('.save')
+  # add additional attributes in html options:
+  # <%= bridge_form_with(model: project, html: { data: { turbo_action: "advance" } }) do |form| %>
   def bridge_form_with(*, **options, &)
     options[:html] ||= {}
     options[:html][:data] ||= {}
