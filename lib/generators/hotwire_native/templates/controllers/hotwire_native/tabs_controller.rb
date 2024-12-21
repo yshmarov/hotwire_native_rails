@@ -8,11 +8,13 @@ class HotwireNative::TabsController < ActionController::Base
   # end
 
   def tab1
-    redirect_to organizations_path
+    redirect_to root_path
+    # redirect_to projects_path
   end
 
   def tab2
-    redirect_to edit_user_registration_path
+    redirect_to root_path
+    # redirect_to edit_user_registration_path
   end
 
   # add more tabs (max 5)
