@@ -43,6 +43,12 @@ Recommended to use with [my fork of iOS Hotwire Native starter app](https://gith
 
 ## Development
 
+Run the local version of the gem:
+
+```ruby
+gem 'hotwire_native_rails', path: '/Users/myusername/Documents/GitHub.nosync/hotwire_native_rails'
+```
+
 Make a release to rubygems:
 
 ```sh
