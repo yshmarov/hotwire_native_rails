@@ -2,8 +2,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
   source_root File.expand_path("templates", __dir__)
 
   def add_gems
-    gem "browser"
-    run "bundle install"
+    run "bundle add browser"
   end
 
   def copy_files
@@ -51,11 +50,13 @@ class HotwireNativeGenerator < Rails::Generators::Base
   end
 
   def add_css_variants
-    return add_tailwind_css_variants if tailwind?
+    return add_tailwind_3_css_variants if tailwind3?
+    return add_tailwind_4_css_variants if tailwind4?
 
     add_hotwire_native_css
   end
 
+  # todo: set it only if tailwindcss
   def add_platform_identifier
     gsub_file "app/views/layouts/application.html.erb", "<html>", "<html <%= platform_identifier %>>"
   end
@@ -74,8 +75,12 @@ class HotwireNativeGenerator < Rails::Generators::Base
     Rails.root.join("package.json").exist?
   end
 
-  def tailwind?
-    Rails.root.join("config/tailwind.config.js").exist? || Rails.root.join("app/assets/tailwind/application.css").exist?
+  def tailwind3?
+    Rails.root.join("config/tailwind.config.js").exist?
+  end
+
+  def tailwind4?
+    Rails.root.join("app/assets/tailwind/application.css").exist?
   end
 
   # class="hotwire-native:hidden"
@@ -91,6 +96,24 @@ class HotwireNativeGenerator < Rails::Generators::Base
     addVariant("non-hotwire-native", "html:not([data-hotwire-native]) &")
   }),
       JS
+    end
+  end
+
+  def add_tailwind_4_css_variants
+    inject_into_file "app/assets/tailwind/application.css", after: "@import 'tailwindcss';\n" do
+      <<-CSS
+@custom-variant hotwire-native {
+  html[data-hotwire-native] & {
+    @slot;
+  }
+}
+
+@custom-variant non-hotwire-native {
+  html:not([data-hotwire-native]) & {
+    @slot;
+  }
+}
+      CSS
     end
   end
 
