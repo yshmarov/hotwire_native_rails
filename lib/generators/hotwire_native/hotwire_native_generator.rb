@@ -75,7 +75,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
   end
 
   def tailwind?
-    Rails.root.join("config/tailwind.config.js").exist?
+    Rails.root.join("config/tailwind.config.js").exist? || Rails.root.join("app/assets/tailwind/application.css").exist?
   end
 
   # class="hotwire-native:hidden"
