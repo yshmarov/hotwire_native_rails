@@ -3,6 +3,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   def add_gems
     gem "browser"
+    run "bundle install"
   end
 
   def copy_files
