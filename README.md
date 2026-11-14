@@ -18,8 +18,6 @@ rails g hotwire_native
 
 ## Usage
 
-Recommended to use with [my fork of iOS Hotwire Native starter app](https://github.com/yshmarov/hotwire-native-ios/tree/superails-extensions-2/Demo).
-
 #### Helpers
 - `viewport_meta_tag` - forbid zooming on mobile/native
 - use `data: { turbo_action: replace_if_native }` to submit authentication forms & forms in modals
