@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Smoke-tests the generator in a brand-new Rails app, the way a user runs it.
+#
+#   bin/smoke tailwind4   rails new --css=tailwind (tailwindcss-rails 4)
+#   bin/smoke tailwind3   a config/tailwind.config.js app (Tailwind 3 setup)
+#   bin/smoke css         plain CSS, no Tailwind
+#
+# It generates the app under tmp/, installs this checkout of the gem, runs
+# `rails g hotwire_native`, checks the files it should have changed, then runs
+# the tests the generator copied into the app.
+set -euo pipefail
+
+flavor="${1:-tailwind4}"
+root="$(cd "$(dirname "$0")/.." && pwd)"
+app="$root/tmp/smoke-$flavor"
+
+rm -rf "$app"
+mkdir -p "$root/tmp"
+
+css_flag=()
+if [ "$flavor" = "tailwind4" ]; then css_flag=(--css=tailwind); fi
+
+rails new "$app" ${css_flag[@]+"${css_flag[@]}"} --quiet --skip-git --skip-docker --skip-kamal \
+  --skip-thruster --skip-solid --skip-action-mailbox --skip-action-text \
+  --skip-active-storage --skip-jbuilder --skip-ci --skip-rubocop --skip-brakeman \
+  --skip-system-test --skip-bootsnap
+
+cd "$app"
+
+if [ "$flavor" = "tailwind3" ]; then
+  printf 'module.exports = {\n  plugins: [\n  ]\n}\n' > config/tailwind.config.js
+fi
+
+bundle add hotwire_native_rails --path "$root"
+
+# The generated integration tests request root_path, so give the app a page.
+bin/rails generate controller pages home --skip-routes --no-helper --quiet
+ruby -pi -e 'sub(/^Rails.application.routes.draw do\n/) { "#{$&}  root \"pages#home\"\n" }' config/routes.rb
+
+bin/rails generate hotwire_native
+
+fail() { echo "SMOKE FAIL ($flavor): $*" >&2; exit 1; }
+layout=app/views/layouts/application.html.erb
+grep -q "viewport_meta_tag" "$layout" || fail "viewport_meta_tag not in layout"
+grep -q "platform_identifier" "$layout" || fail "platform_identifier not on <html>"
+grep -q "page_title" "$layout" || fail "page_title not in <title>"
+grep -q "include DeviceFormat" app/controllers/application_controller.rb || fail "DeviceFormat not included"
+grep -q "draw(:hotwire_native)" config/routes.rb || fail "routes not drawn"
+grep -rq "turbo_native_app?" app test && fail "turbo_native_app? still generated"
+
+case "$flavor" in
+  tailwind4) grep -q "@custom-variant hotwire-native" app/assets/tailwind/application.css || fail "Tailwind 4 variants not added" ;;
+  tailwind3) grep -q 'addVariant("hotwire-native"' config/tailwind.config.js || fail "Tailwind 3 variants not added" ;;
+  css)       grep -q "body.hotwire-native" app/assets/stylesheets/application.css || fail "CSS class not added"
+             grep -q "hotwire_native_app?" "$layout" || fail "body class not added" ;;
+esac
+
+bin/rails test
+echo "SMOKE OK ($flavor)"

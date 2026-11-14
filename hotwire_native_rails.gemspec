@@ -11,6 +11,10 @@ Gem::Specification.new do |spec|
   spec.summary = "Generate Hotwire Native Rails helpers and bridge components"
   spec.homepage = "https://github.com/yshmarov/hotwire_native_rails"
   spec.license = "MIT"
+  spec.required_ruby_version = ">= 3.1"
+
+  # hotwire_native_app? (used by every generated helper) arrived in turbo-rails 2.0.11.
+  spec.add_dependency "turbo-rails", ">= 2.0.11"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage

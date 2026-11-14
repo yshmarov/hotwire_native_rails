@@ -10,7 +10,7 @@ module HotwireNativeHelper
   # <% content_for :title, "Sign in | My App" %>
   def page_title
     title_options = [
-      (content_for(:hotwire_native_title) if turbo_native_app?),
+      (content_for(:hotwire_native_title) if hotwire_native_app?),
       content_for(:title),
       @page_title,
       Rails.application.class.module_parent.name
@@ -22,13 +22,13 @@ module HotwireNativeHelper
   # forbid zooming on mobile devices
   def viewport_meta_tag
     content = ['width=device-width,initial-scale=1']
-    content << 'maximum-scale=1, user-scalable=0' if turbo_native_app? || browser.device.mobile?
+    content << 'maximum-scale=1, user-scalable=0' if hotwire_native_app? || browser.device.mobile?
     tag.meta(name: 'viewport', content: content.join(','))
   end
 
   # set on <html> tag
   def platform_identifier
-    'data-hotwire-native' if turbo_native_app?
+    'data-hotwire-native' if hotwire_native_app?
   end
 
   # link_to 'Next', next_path, data: { turbo_action: replace_if_native }
@@ -36,15 +36,33 @@ module HotwireNativeHelper
   # caution: if you open a modal on top of the root page, and replace, it will replace the root page.
   # projects#show will replace projects#index => BAD
   def replace_if_native
-    return 'replace' if turbo_native_app?
+    return 'replace' if hotwire_native_app?
 
     'advance'
   end
 
-  # override link_to to not open internal links in in-app browser on native app
-  def link_to(name = nil, options = nil, html_options = {}, &)
-    html_options[:target] = '' if turbo_native_app? && internal_url?(url_for(options))
-    super
+  # In the native app, drop target="_blank" from links to your own host, so they
+  # open in the app instead of the in-app browser. External links keep it.
+  # Handles both forms:
+  #   link_to "Home", root_path, target: "_blank"
+  #   link_to root_path, target: "_blank" do ... end
+  # (with a block, the URL and HTML options arrive one argument earlier).
+  # The caller's options hash is copied, never modified.
+  def link_to(name = nil, options = nil, html_options = nil, &block)
+    if hotwire_native_app?
+      url, attributes = block ? [name, options] : [options, html_options]
+
+      if url && attributes.is_a?(Hash) && internal_url?(url_for(url))
+        attributes = attributes.except(:target, 'target')
+        if block
+          options = attributes
+        else
+          html_options = attributes
+        end
+      end
+    end
+
+    super(name, options, html_options, &block)
   end
 
   # https://github.com/joemasilotti/daily-log/blob/main/rails/app/helpers/form_helper.rb
@@ -82,11 +100,14 @@ module HotwireNativeHelper
     }
   end
 
+  # A relative path, or an http(s) URL on the current host.
+  # mailto:, tel: and other schemes are never internal.
   def internal_url?(url)
     uri = URI.parse(url)
-    return true if uri.path.present? && uri.host.blank?
-    return true if url.include?(root_url)
+    return false if uri.scheme.present? && !uri.scheme.match?(/\Ahttps?\z/)
 
+    uri.host.blank? || uri.host == request.host
+  rescue URI::InvalidURIError
     false
   end
 end

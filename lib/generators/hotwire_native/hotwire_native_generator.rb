@@ -85,7 +85,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   # class="hotwire-native:hidden"
   # class="non-hotwire-native:hidden"
-  def add_tailwind_css_variants
+  def add_tailwind_3_css_variants
     prepend_to_file "config/tailwind.config.js", "const plugin = require('tailwindcss/plugin')\n"
 
     inject_into_file "config/tailwind.config.js", after: "plugins: [" do
@@ -100,7 +100,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
   end
 
   def add_tailwind_4_css_variants
-    inject_into_file "app/assets/tailwind/application.css", after: "@import 'tailwindcss';\n" do
+    inject_into_file "app/assets/tailwind/application.css", after: /@import ["']tailwindcss["'];\n/ do
       <<-CSS
 @custom-variant hotwire-native {
   html[data-hotwire-native] & {
@@ -119,7 +119,7 @@ class HotwireNativeGenerator < Rails::Generators::Base
 
   # class="hotwire-native:hidden"
   def add_hotwire_native_css
-    gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"hotwire-native\" if turbo_native_app? %>\">"
+    gsub_file "app/views/layouts/application.html.erb", "<body>", "<body class=\"<%= \"hotwire-native\" if hotwire_native_app? %>\">"
 
     append_to_file "app/assets/stylesheets/application.css" do
       <<-CSS

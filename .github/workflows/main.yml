@@ -1,27 +1,30 @@
-name: Ruby
+name: Smoke test
 
 on:
   push:
     branches:
-      - master
-
+      - main
   pull_request:
 
 jobs:
-  build:
+  smoke:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: ${{ matrix.flavor }}
     strategy:
+      fail-fast: false
       matrix:
-        ruby:
-          - '3.3.3'
+        flavor:
+          - tailwind4
+          - tailwind3
+          - css
 
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
-      - name: Run the default task
-        run: bundle exec rake
+          ruby-version: '3.4'
+      - name: Install Rails
+        run: gem install rails --no-document
+      - name: Generate an app, run the generator and its tests
+        run: bin/smoke ${{ matrix.flavor }}
